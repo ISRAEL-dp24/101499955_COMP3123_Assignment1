@@ -14,6 +14,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+
 // Signup
 router.post('/signup', async (req, res) => {
   try {
@@ -30,11 +31,11 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Login
+//login
 router.post('/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { usernameOrEmail, password } = req.body; // username or email, so user can login with both
+    const user = await User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }

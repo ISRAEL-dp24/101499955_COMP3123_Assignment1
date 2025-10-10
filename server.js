@@ -3,6 +3,7 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
+
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/comp3123_assignment1')
   .then(() => console.log('MongoDB connected successfully'))

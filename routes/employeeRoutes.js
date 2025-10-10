@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Employee = require('../models/Employee');
 
-// Import the middleware from userRoutes (ensure it's exported there)
+//import from userRoutes
 const { authenticateToken } = require('./userRoutes');
 
-// GET all employees
+//GET all employees
 router.get('/employees', authenticateToken, async (req, res) => {
   try {
     const employees = await Employee.find({}, { __v: 0 });
@@ -24,7 +24,7 @@ router.get('/employees', authenticateToken, async (req, res) => {
   }
 });
 
-// POST create new employee
+//POST create new employee
 router.post('/employees', authenticateToken, async (req, res) => {
   try {
     const { employeeId, firstName, lastName, email, position, salary, date_of_joining, department } = req.body;
@@ -40,7 +40,7 @@ router.post('/employees', authenticateToken, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-// GET employee by ID
+//GET employee by ID
 router.get('/employees/:eid', authenticateToken, async (req, res) => {
   try {
     const employee = await Employee.findById(req.params.eid);
@@ -60,7 +60,7 @@ router.get('/employees/:eid', authenticateToken, async (req, res) => {
   }
 });
 
-// PUT update employee by ID
+//PUT update employee by ID
 router.put('/employees/:eid', authenticateToken, async (req, res) => {
   try {
     const updates = req.body;
@@ -77,7 +77,7 @@ router.put('/employees/:eid', authenticateToken, async (req, res) => {
   }
 });
 
-// DELETE employee by ID (using query param as per assignment)
+//DELETE employee by ID (using query param)
 router.delete('/employees', authenticateToken, async (req, res) => {
   try {
     const { eid } = req.query;
