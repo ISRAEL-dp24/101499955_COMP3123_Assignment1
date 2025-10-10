@@ -6,9 +6,9 @@ const Employee = require('../models/Employee');
 const { authenticateToken } = require('./userRoutes');
 
 // GET all employees
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/employees', authenticateToken, async (req, res) => {
   try {
-    const employees = await Employee.find({}, { __v: 0 }); // Exclude __v
+    const employees = await Employee.find({}, { __v: 0 });
     res.status(200).json(employees.map(emp => ({
       employee_id: emp._id,
       first_name: emp.first_name,
@@ -25,11 +25,11 @@ router.get('/', authenticateToken, async (req, res) => {
 });
 
 // POST create new employee
-router.post('/', authenticateToken, async (req, res) => {
+router.post('/employees', authenticateToken, async (req, res) => {
   try {
-    const { first_name, last_name, email, position, salary, date_of_joining, department } = req.body;
+    const { employeeId, firstName, lastName, email, position, salary, date_of_joining, department } = req.body;
     const newEmployee = new Employee({ 
-      first_name, last_name, email, position, salary, date_of_joining, department 
+      employeeId, firstName, lastName, email, position, salary, date_of_joining, department 
     });
     await newEmployee.save();
     res.status(201).json({ 
@@ -40,9 +40,8 @@ router.post('/', authenticateToken, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
-// GET employee by eid (path param)
-router.get('/:eid', authenticateToken, async (req, res) => {
+// GET employee by ID
+router.get('/employees/:eid', authenticateToken, async (req, res) => {
   try {
     const employee = await Employee.findById(req.params.eid);
     if (!employee) return res.status(404).json({ message: 'Employee not found' });
@@ -61,8 +60,8 @@ router.get('/:eid', authenticateToken, async (req, res) => {
   }
 });
 
-// PUT update employee by eid (path param)
-router.put('/:eid', authenticateToken, async (req, res) => {
+// PUT update employee by ID
+router.put('/employees/:eid', authenticateToken, async (req, res) => {
   try {
     const updates = req.body;
     updates.updated_at = Date.now();
@@ -78,8 +77,8 @@ router.put('/:eid', authenticateToken, async (req, res) => {
   }
 });
 
-// DELETE employee by eid (query param)
-router.delete('/', authenticateToken, async (req, res) => {
+// DELETE employee by ID (using query param as per assignment)
+router.delete('/employees', authenticateToken, async (req, res) => {
   try {
     const { eid } = req.query;
     if (!eid) return res.status(400).json({ message: 'eid query parameter required' });
